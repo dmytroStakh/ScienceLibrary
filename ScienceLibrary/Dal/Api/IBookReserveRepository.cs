@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ScienceLibrary.Dal.Api
 {
-    public class IReservedBooksRepository
+    public interface IBookReserveRepository
     {
     }
 }

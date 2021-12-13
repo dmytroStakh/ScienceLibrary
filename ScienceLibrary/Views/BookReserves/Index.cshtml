@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BookCopy)
+                @Html.DisplayNameFor(model => model.BookCopy.Book.Title)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedDate)
@@ -31,7 +31,7 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BookCopy.Book.Author)
+                @Html.DisplayFor(modelItem => item.BookCopy.BookId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDate)

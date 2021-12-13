@@ -117,7 +117,7 @@ namespace ScienceLibrary.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookId"] = new SelectList(unitOfWork.BookCopyRepository._context.Books, "Id", "Id", bookCopy.BookId);
+            ViewData["BookId"] = new SelectList(unitOfWork.BookCopyRepository._context.Books, "Title", "Title", bookCopy.BookId);
             return View(bookCopy);
         }
 

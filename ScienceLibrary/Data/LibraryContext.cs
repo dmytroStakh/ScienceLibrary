@@ -16,9 +16,5 @@ namespace ScienceLibrary.Data
         public DbSet<Book> Books { get; set; }
         public DbSet<BookCopy> BookCopies { get; set; }
         public DbSet<BookReserve> BookReserves { get; set; }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder options)
-        //                => options.UseSqlServer("LibraryContext");
-
     }
 }

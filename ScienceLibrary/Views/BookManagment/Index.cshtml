@@ -1,41 +1,67 @@
 ﻿@model dynamic
+
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Index";
 }
-<h2>@ViewBag.Message</h2>
 
-<p><b>Teacher List</b></p>
+<p>
+    <a ></a>
+    <a class="btn btn-primary btn-lg" asp-controller="Books" asp-action="Create">Create New </a>
 
-<table>
-    <tr>
-        <th>Id</th>
-        <th>Code</th>
-        <th>Name</th>
-    </tr>
-    @foreach (Book book in Model.BooksInAlfabetOrder)
-    {
-        <tr>
-            <td>@book.Id</td>
-            <td>@book.Title</td>
-            <td>@book.Author</td>
-        </tr>
-    }
-</table>
+</p>
 
-<p><b>Student List</b></p>
 
-<table>
-    <tr>
-        <td>Id</td>
-        <td>Title</td>
-        <td>Author</td>
-    </tr>
-    @foreach (Book book in Model.AllBooks)
-    {
-        <tr>
-            <td>@book.Id</td>
-            <td>@book.Title</td>
-            <td>@book.Author</td>
-        </tr>
-    }
-</table>
+<ul class="nav nav-pills">
+    <li class="nav-item ">
+        <a class="nav-link active rounded-0" data-toggle="pill" href="#home">All Books</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link rounded-0" data-toggle="pill" href="#menu1">In Alfabet Order</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link rounded-0" data-toggle="pill" href="#menu2">All Reserved</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link rounded-0" data-toggle="pill" href="#menu2">All Avaliable</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane container active p-0" id="home">
+        <h5 class="text-uppercase p-2 text-center">All Books</h5>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark text-white">
+                <tr>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model.AllBooks)
+                {
+                    <tr>
+                        <td>@book.Id</td>
+                        <td>@book.Title</td>
+                        <td>@book.Author</td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane container fade p-0" id="menu1">
+        <h5 class="text-uppercase p-2 text-center">Books In Alfabet Order</h5>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark text-white">
+            </thead>
+            <tbody>
+                @foreach (var book in Model.BooksInAlfabetOrder)
+                {
+                    <tr>
+                        <td>@book.Title</td>
+                        <td>@book.Author</td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>  

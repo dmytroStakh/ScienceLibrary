@@ -22,7 +22,7 @@
                 @Html.DisplayNameFor(model => model.IsArchived)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Book)
+                @Html.DisplayNameFor(model => model.Book.Title)
             </th>
             <th></th>
         </tr>
@@ -40,7 +40,7 @@
                 @Html.DisplayFor(modelItem => item.IsArchived)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Book.Id)
+                @Html.DisplayFor(modelItem => item.Book.Title)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

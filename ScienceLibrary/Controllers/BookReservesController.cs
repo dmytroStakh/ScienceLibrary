@@ -20,7 +20,7 @@ namespace ScienceLibrary.Controllers
         // GET: BookReserves
         public IActionResult Index()
         {
-            var libraryContext = unitOfWork.BookReserveRepository._context.BookReserves.Include(b => b.BookCopy);
+            var libraryContext = unitOfWork.BookReserveRepository._context.BookReserves.Include(b => b.BookCopy.Book);
             return View(libraryContext.ToList());
         }
 
@@ -55,7 +55,7 @@ namespace ScienceLibrary.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CreatedDate,BookCopyId")] BookReserve bookReserve)
+        public IActionResult Create([Bind("Id,CreatedDate,BookCopyId")] BookReserve bookReserve)
         {
             if (ModelState.IsValid)
             {

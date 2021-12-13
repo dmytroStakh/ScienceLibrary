@@ -54,7 +54,7 @@ namespace ScienceLibrary
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=BookManagment}/{action=Index}/{id?}");
             });
         }
     }

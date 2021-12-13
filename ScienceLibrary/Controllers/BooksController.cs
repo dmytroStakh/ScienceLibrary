@@ -19,7 +19,8 @@ namespace ScienceLibrary.Controllers
         // GET: Books
         public ActionResult Index()
         {
-            return View(unitOfWork.BookRepository.GetAll());
+            var libraryContext = unitOfWork.BookCopyRepository._context.Books.Include(b => b.BookCopies);
+            return View(libraryContext);
         }
 
         // GET: Books/Details/5

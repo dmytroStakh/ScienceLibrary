@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ScienceLibrary.Dal;
 using ScienceLibrary.Data;
 using ScienceLibrary.Models;
 
@@ -12,29 +13,28 @@ namespace ScienceLibrary.Controllers
 {
     public class BookCopiesController : Controller
     {
-        private readonly LibraryContext _context;
-
-        public BookCopiesController(LibraryContext context)
+        private UnitOfWork unitOfWork;
+        public BookCopiesController(LibraryContext _context)
         {
-            _context = context;
+            unitOfWork = new UnitOfWork(_context);
         }
 
         // GET: BookCopies
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var libraryContext = _context.BookCopies.Include(b => b.Book);
-            return View(await libraryContext.ToListAsync());
+            var libraryContext = unitOfWork.BookCopyRepository._context.BookCopies.Include(b => b.Book);
+            return View(libraryContext.ToList());
         }
 
         // GET: BookCopies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var bookCopy = await _context.BookCopies
+            var bookCopy = unitOfWork.BookCopyRepository._context.BookCopies
                 .Include(b => b.Book)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (bookCopy == null)
@@ -48,7 +48,7 @@ namespace ScienceLibrary.Controllers
         // GET: BookCopies/Create
         public IActionResult Create()
         {
-            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id");
+            ViewData["BookId"] = new SelectList(unitOfWork.BookCopyRepository._context.Books, "Id", "Id");
             return View();
         }
 
@@ -57,32 +57,31 @@ namespace ScienceLibrary.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IsReserved,IsArchived,BookId")] BookCopy bookCopy)
+        public IActionResult Create([Bind("Id,IsReserved,IsArchived,BookId")] BookCopy bookCopy)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(bookCopy);
-                await _context.SaveChangesAsync();
+                unitOfWork.BookCopyRepository.Insert(bookCopy);
+                unitOfWork.Save();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id", bookCopy.BookId);
+            ViewData["BookId"] = new SelectList(unitOfWork.BookCopyRepository._context.Books, "Id", "Id", bookCopy.BookId);
             return View(bookCopy);
         }
 
         // GET: BookCopies/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var bookCopy = await _context.BookCopies.FindAsync(id);
+            var bookCopy = unitOfWork.BookCopyRepository.GetById(id);
             if (bookCopy == null)
             {
                 return NotFound();
             }
-            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id", bookCopy.BookId);
+            ViewData["BookId"] = new SelectList(unitOfWork.BookCopyRepository._context.Books, "Id", "Id", bookCopy.BookId);
             return View(bookCopy);
         }
 
@@ -91,7 +90,7 @@ namespace ScienceLibrary.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IsReserved,IsArchived,BookId")] BookCopy bookCopy)
+        public IActionResult Edit(int id, [Bind("Id,IsReserved,IsArchived,BookId")] BookCopy bookCopy)
         {
             if (id != bookCopy.Id)
             {
@@ -102,8 +101,8 @@ namespace ScienceLibrary.Controllers
             {
                 try
                 {
-                    _context.Update(bookCopy);
-                    await _context.SaveChangesAsync();
+                    unitOfWork.BookCopyRepository.Update(bookCopy);
+                    unitOfWork.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -118,19 +117,19 @@ namespace ScienceLibrary.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id", bookCopy.BookId);
+            ViewData["BookId"] = new SelectList(unitOfWork.BookCopyRepository._context.Books, "Id", "Id", bookCopy.BookId);
             return View(bookCopy);
         }
 
         // GET: BookCopies/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var bookCopy = await _context.BookCopies
+            var bookCopy = unitOfWork.BookCopyRepository._context.BookCopies
                 .Include(b => b.Book)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (bookCopy == null)
@@ -144,17 +143,17 @@ namespace ScienceLibrary.Controllers
         // POST: BookCopies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var bookCopy = await _context.BookCopies.FindAsync(id);
-            _context.BookCopies.Remove(bookCopy);
-            await _context.SaveChangesAsync();
+            unitOfWork.BookCopyRepository.Delete(id);
+
+            unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BookCopyExists(int id)
         {
-            return _context.BookCopies.Any(e => e.Id == id);
+            return unitOfWork.BookCopyRepository.GetById(id) != null;
         }
     }
 }

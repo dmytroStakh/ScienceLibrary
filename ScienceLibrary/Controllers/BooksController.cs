@@ -17,7 +17,7 @@ namespace ScienceLibrary.Controllers
         // GET: Books
         public ActionResult Index()
         {
-            return View(unitOfWork.BookRepository.GetAllBooks());
+            return View(unitOfWork.BookRepository.GetAll());
         }
 
         // GET: Books/Details/5
@@ -28,7 +28,7 @@ namespace ScienceLibrary.Controllers
                 return NotFound();
             }
 
-            var book = unitOfWork.BookRepository.GetSBookByID(id);
+            var book = unitOfWork.BookRepository.GetById(id);
             if (book == null)
             {
                 return NotFound();
@@ -50,7 +50,7 @@ namespace ScienceLibrary.Controllers
         {
             if (ModelState.IsValid)
             {
-                unitOfWork.BookRepository.AddNewBook(book);
+                unitOfWork.BookRepository.Insert(book);
                 unitOfWork.Save();
                 return RedirectToAction(nameof(Index));
             }
@@ -65,7 +65,7 @@ namespace ScienceLibrary.Controllers
                 return NotFound();
             }
 
-            var book = unitOfWork.BookRepository.GetSBookByID(id);
+            var book = unitOfWork.BookRepository.GetById(id);
             if (book == null)
             {
                 return NotFound();
@@ -87,12 +87,12 @@ namespace ScienceLibrary.Controllers
             {
                 try
                 {
-                    unitOfWork.BookRepository.UpdateBook(book);
+                    unitOfWork.BookRepository.Update(book);
                     unitOfWork.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (unitOfWork.BookRepository.GetSBookByID(book.Id) == null)
+                    if (unitOfWork.BookRepository.GetById(book.Id) == null)
                     {
                         return NotFound();
                     }
@@ -114,7 +114,7 @@ namespace ScienceLibrary.Controllers
                 return NotFound();
             }
 
-            var book = unitOfWork.BookRepository.GetSBookByID(id);
+            var book = unitOfWork.BookRepository.GetById(id);
             if (book == null)
             {
                 return NotFound();
@@ -128,7 +128,7 @@ namespace ScienceLibrary.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int bookId)
         {
-            unitOfWork.BookRepository.DeleteBook(bookId);
+            unitOfWork.BookRepository.Delete(bookId);
 
             unitOfWork.Save();
             return RedirectToAction(nameof(Index));

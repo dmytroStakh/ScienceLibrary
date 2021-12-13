@@ -17,7 +17,7 @@ namespace ScienceLibrary.Controllers
             ViewBag.Message = "Welcome to my demo!";
             dynamic mymodel = new ExpandoObject();
             mymodel.BooksInAlfabetOrder = unitOfWork.BookRepository.GetBooksInAlfabetOrder();
-            mymodel.AllBooks = unitOfWork.BookRepository.GetAllBooks();
+            mymodel.AllBooks = unitOfWork.BookRepository.GetAll();
             return View(mymodel);
         }
     }

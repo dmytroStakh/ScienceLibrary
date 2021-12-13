@@ -16,6 +16,7 @@ namespace ScienceLibrary.Dal
             _context = context;
         }
         private BookRepository _bookRepository;
+        private BookCopyRepository _bookCopyRepository;
 
         public BookRepository BookRepository
         {
@@ -27,6 +28,19 @@ namespace ScienceLibrary.Dal
                     _bookRepository = new BookRepository(_context);
                 }
                 return _bookRepository;
+            }
+        }
+
+        public BookCopyRepository BookCopyRepository
+        {
+            get
+            {
+
+                if (_bookCopyRepository == null)
+                {
+                    _bookCopyRepository = new BookCopyRepository(_context);
+                }
+                return _bookCopyRepository;
             }
         }
 

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace ScienceLibrary.Dal.Api
 {
-    public class IBookCopyRepository
+    public interface IBookCopyRepository
     {
-
+        void Test();
     }
 }

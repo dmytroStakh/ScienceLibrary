@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ScienceLibrary.Dal;
 using ScienceLibrary.Data;
 using ScienceLibrary.Models;
 
@@ -12,29 +8,27 @@ namespace ScienceLibrary.Controllers
 {
     public class BooksController : Controller
     {
-        private readonly LibraryContext _context;
-
-        public BooksController(LibraryContext context)
+        private UnitOfWork unitOfWork;
+        public BooksController(LibraryContext _context)
         {
-            _context = context;
+            unitOfWork = new UnitOfWork(_context);
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public ActionResult Index()
         {
-            return View(await _context.Books.ToListAsync());
+            return View(unitOfWork.BookRepository.GetAllBooks());
         }
 
         // GET: Books/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var book = await _context.Books
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var book = unitOfWork.BookRepository.GetSBookByID(id);
             if (book == null)
             {
                 return NotFound();
@@ -50,30 +44,28 @@ namespace ScienceLibrary.Controllers
         }
 
         // POST: Books/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Author")] Book book)
+        public IActionResult Create([Bind("Id,Title,Author")] Book book)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(book);
-                await _context.SaveChangesAsync();
+                unitOfWork.BookRepository.AddNewBook(book);
+                unitOfWork.Save();
                 return RedirectToAction(nameof(Index));
             }
             return View(book);
         }
 
         // GET: Books/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var book = await _context.Books.FindAsync(id);
+            var book = unitOfWork.BookRepository.GetSBookByID(id);
             if (book == null)
             {
                 return NotFound();
@@ -82,11 +74,9 @@ namespace ScienceLibrary.Controllers
         }
 
         // POST: Books/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author")] Book book)
+        public IActionResult Edit(int id, [Bind("Id,Title,Author")] Book book)
         {
             if (id != book.Id)
             {
@@ -97,12 +87,12 @@ namespace ScienceLibrary.Controllers
             {
                 try
                 {
-                    _context.Update(book);
-                    await _context.SaveChangesAsync();
+                    unitOfWork.BookRepository.UpdateBook(book);
+                    unitOfWork.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BookExists(book.Id))
+                    if (unitOfWork.BookRepository.GetSBookByID(book.Id) == null)
                     {
                         return NotFound();
                     }
@@ -117,15 +107,14 @@ namespace ScienceLibrary.Controllers
         }
 
         // GET: Books/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var book = await _context.Books
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var book = unitOfWork.BookRepository.GetSBookByID(id);
             if (book == null)
             {
                 return NotFound();
@@ -137,17 +126,17 @@ namespace ScienceLibrary.Controllers
         // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int bookId)
         {
-            var book = await _context.Books.FindAsync(id);
-            _context.Books.Remove(book);
-            await _context.SaveChangesAsync();
+            unitOfWork.BookRepository.DeleteBook(bookId);
+
+            unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BookExists(int id)
+        public ActionResult GetInAlfabetOrder() 
         {
-            return _context.Books.Any(e => e.Id == id);
+            return View(unitOfWork.BookRepository.GetBooksInAlfabetOrder());
         }
     }
 }

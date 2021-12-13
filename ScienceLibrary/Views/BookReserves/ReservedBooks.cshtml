@@ -1,14 +1,13 @@
 ﻿@model IEnumerable<ScienceLibrary.Models.Book>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "ReservedBooks";
 }
 
-<h1>Index</h1>
+<h1>GetInAlfabetOrder</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
-    <a asp-action="GetInAlfabetOrder">Alfabet Order</a> |
 </p>
 <table class="table">
     <thead>
@@ -41,14 +40,3 @@
         }
     </tbody>
 </table>
-
-<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-    <ul class="navbar-nav flex-grow-1">
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">All Books</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="GetInAlfabetOrder">Books in Alfabet Order</a>
-        </li>
-    </ul>
-</div>

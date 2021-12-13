@@ -18,6 +18,10 @@ namespace ScienceLibrary.Controllers
             dynamic mymodel = new ExpandoObject();
             mymodel.BooksInAlfabetOrder = unitOfWork.BookRepository.GetBooksInAlfabetOrder();
             mymodel.AllBooks = unitOfWork.BookRepository.GetAll();
+            mymodel.AllReserved = unitOfWork.BookCopyRepository.GetAllResered();
+            mymodel.AllAvailible = unitOfWork.BookCopyRepository.GetAllAvailible();
+            mymodel.AllArchived = unitOfWork.BookCopyRepository.GetAllArchived();
+
             return View(mymodel);
         }
     }

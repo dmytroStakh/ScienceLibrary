@@ -6,7 +6,7 @@
 
 <p>
     <a class="btn btn-primary btn-lg" asp-controller="Books" asp-action="Create">Create New </a>
-    <a class="btn btn-primary btn-lg" asp-controller="Books" asp-action="Create">Export Data </a>
+    <a class="btn btn-primary btn-lg" asp-controller="Books" asp-action="ExportEmployeeData">Export Data </a>
 </p>
 
 
@@ -21,10 +21,10 @@
         <a class="nav-link rounded-0" data-toggle="pill" href="#menu2">All Reserved</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link rounded-0" data-toggle="pill" href="#menu2">All Avaliable</a>
+        <a class="nav-link rounded-0" data-toggle="pill" href="#menu3">All Avaliable</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link rounded-0" data-toggle="pill" href="#menu2">All Archived</a>
+        <a class="nav-link rounded-0" data-toggle="pill" href="#menu4">All Archived</a>
     </li>
 </ul>
 <div class="tab-content">
@@ -33,17 +33,16 @@
         <table class="table table-bordered table-striped">
             <thead class="thead-dark text-white">
                 <tr>
-                   
                 </tr>
             </thead>
             <tbody>
                 @foreach (var book in Model.AllBooks)
                 {
-                <tr>
-                    <td>@book.Id</td>
-                    <td>@book.Title</td>
-                    <td>@book.Author</td>
-                </tr>
+                    <tr>
+                        <td>@book.Id</td>
+                        <td>@book.Title</td>
+                        <td>@book.Author</td>
+                    </tr>
 
                 }
             </tbody>
@@ -61,6 +60,57 @@
                         <td>@book.Title</td>
                         <td>@book.Author</td>
                     </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane container fade p-0" id="menu2">
+        <h5 class="text-uppercase p-2 text-center">Reserved Books</h5>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark text-white">
+            </thead>
+            <tbody>
+                @foreach (var bookCopy in Model.AllReserved)
+                {
+                <tr>
+                    <td>@bookCopy.Id</td>
+                    <td>@bookCopy.Book.Title</td>
+                </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane container fade p-0" id="menu3">
+        <h5 class="text-uppercase p-2 text-center">Availible Books</h5>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark text-white">
+            </thead>
+            <tbody>
+                @foreach (var bookCopy in Model.AllAvailible)
+                {
+                <tr>
+                    <td>@bookCopy.Id</td>
+                    <td>@bookCopy.Book.Title</td>
+                </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane container fade p-0" id="menu4">
+        <h5 class="text-uppercase p-2 text-center">Archived Books</h5>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark text-white">
+            </thead>
+            <tbody>
+                @foreach (var bookCopy in Model.AllArchived)
+                {
+                <tr>
+                    <td>@bookCopy.Id</td>
+                    <td>@bookCopy.Book.Title</td>
+                </tr>
 
                 }
             </tbody>

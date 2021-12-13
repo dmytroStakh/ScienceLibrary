@@ -10,16 +10,24 @@ namespace ScienceLibrary.Dal.Impl
 {
     public class BookCopyRepository : GenericRepository<BookCopy>, IBookCopyRepository
     {
-        private LibraryContext _context;
-
         public BookCopyRepository(LibraryContext context):base(context)
         {
             _context = context;
         }
 
-        public void Test()
+        public IQueryable<BookCopy> GetAllAvailible()
         {
-            throw new NotImplementedException();
+            return _context.BookCopies.Where(bookCopy => bookCopy.IsReserved == false && bookCopy.IsArchived == false);
+        }
+
+        public IQueryable<BookCopy> GetAllResered()
+        {
+            return _context.BookCopies.Where(bookCopy => bookCopy.IsReserved == true);
+        }
+
+        public IQueryable<BookCopy> GetAllArchived()
+        {
+            return _context.BookCopies.Where(bookCopy => bookCopy.IsArchived == true);
         }
     }
 }

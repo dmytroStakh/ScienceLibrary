@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using ScienceLibrary.Dal;
 using ScienceLibrary.Data;
 using ScienceLibrary.Models;
+using ScienceLibrary.Services;
+using System.Threading.Tasks;
 
 namespace ScienceLibrary.Controllers
 {
@@ -137,6 +139,13 @@ namespace ScienceLibrary.Controllers
         public ActionResult GetInAlfabetOrder() 
         {
             return View(unitOfWork.BookRepository.GetBooksInAlfabetOrder());
+        }
+
+        public IActionResult ExportEmployeeData()
+        {
+            var employeeData = unitOfWork.BookRepository.GetAll();
+            var fileDownloadName = "books.csv";
+            return new BooksCsvResult(employeeData, fileDownloadName);
         }
     }
 }

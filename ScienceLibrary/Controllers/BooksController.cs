@@ -4,7 +4,6 @@ using ScienceLibrary.Dal;
 using ScienceLibrary.Data;
 using ScienceLibrary.Models;
 using ScienceLibrary.Services;
-using System.Threading.Tasks;
 
 namespace ScienceLibrary.Controllers
 {
